@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bihar RTPS AutoFill</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- ── HEADER ──────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-brand">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L2 7l10 5 10-5-10-5z" fill="rgba(255,255,255,0.15)"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      <div>
+        <h1>RTPS AutoFill</h1>
+        <p class="subtitle">Bihar ServicePlus Form Filler</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="btn-import" class="icon-btn" title="Import Profiles">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+      </button>
+      <button id="btn-export" class="icon-btn" title="Export All Profiles">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── FORM STATUS BAR ─────────────────────────────── -->
+  <div class="status-bar" id="status-bar">
+    <span class="status-indicator" id="status-indicator"></span>
+    <span id="status-text">Checking page...</span>
+  </div>
+
+  <!-- ── TAB NAVIGATION ──────────────────────────────── -->
+  <nav class="tabs">
+    <button class="tab active" data-tab="profiles">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      Profiles
+    </button>
+    <button class="tab" data-tab="editor">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+      Add / Edit
+    </button>
+  </nav>
+
+  <!-- ── PROFILES LIST ───────────────────────────────── -->
+  <div class="tab-content active" id="tab-profiles">
+    <div class="search-bar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="search-profiles" placeholder="Search profiles...">
+    </div>
+    <div class="profiles-list" id="profiles-list">
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <line x1="19" y1="8" x2="19" y2="14"/>
+          <line x1="22" y1="11" x2="16" y2="11"/>
+        </svg>
+        <p>No profiles yet</p>
+        <span>Click "Add / Edit" to create your first profile</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROFILE EDITOR ──────────────────────────────── -->
+  <div class="tab-content" id="tab-editor">
+    <form id="profile-form" autocomplete="off">
+      <input type="hidden" id="edit-id">
+
+      <!-- Personal Info Section -->
+      <div class="form-section">
+        <div class="section-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <h3>Personal Information</h3>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-gender">Gender</label>
+            <select id="f-gender">
+              <option value="">Select</option>
+              <option value="Male">Male / पुरुष</option>
+              <option value="Female">Female / स्त्री</option>
+              <option value="Third Gender">Third Gender / तृतीय लिंग</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="f-salutation">Salutation</label>
+            <select id="f-salutation">
+              <option value="">Select</option>
+              <option value="Shri">Shri / श्री</option>
+              <option value="Smt">Smt / श्रीमती</option>
+              <option value="Kumari">Kumari / कुमारी</option>
+              <option value="Mr">Mr.</option>
+              <option value="Mrs">Mrs.</option>
+              <option value="Ms">Ms.</option>
+            </select>
+          </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-dob">Date of Birth</label>
+            <input type="text" id="f-dob" placeholder="DD/MM/YYYY">
+          </div>
+          <div class="form-group">
+            <label for="f-religion">Religion</label>
+            <select id="f-religion">
+              <option value="">Select</option>
+              <option value="Hindu">Hindu / हिन्दू</option>
+              <option value="Islam">Muslim / मुस्लिम</option>
+              <option value="Sikh">Sikh / सिख</option>
+              <option value="Christian">Christian / ईसाई</option>
+              <option value="Buddhism">Buddhist / बौद्ध</option>
+              <option value="Jain">Jain / जैन</option>
+              <option value="Other">Other / अन्य</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-name-en">Name (English) *</label>
+            <input type="text" id="f-name-en" placeholder="Applicant Name" required>
+          </div>
+          <div class="form-group">
+            <label for="f-name-hi">Name (Hindi)</label>
+            <input type="text" id="f-name-hi" placeholder="Auto-filled if blank" dir="auto">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-father-en">Father's Name (English)</label>
+            <input type="text" id="f-father-en" placeholder="Father's Name">
+          </div>
+          <div class="form-group">
+            <label for="f-father-hi">Father's Name (Hindi)</label>
+            <input type="text" id="f-father-hi" placeholder="Auto-filled if blank" dir="auto">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-mother-en">Mother's Name (English)</label>
+            <input type="text" id="f-mother-en" placeholder="Mother's Name">
+          </div>
+          <div class="form-group">
+            <label for="f-mother-hi">Mother's Name (Hindi)</label>
+            <input type="text" id="f-mother-hi" placeholder="Auto-filled if blank" dir="auto">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-husband-en">Husband's Name (English)</label>
+            <input type="text" id="f-husband-en" placeholder="If applicable">
+          </div>
+          <div class="form-group">
+            <label for="f-husband-hi">Husband's Name (Hindi)</label>
+            <input type="text" id="f-husband-hi" placeholder="Auto-filled if blank" dir="auto">
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="form-section">
+        <div class="section-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"/>
+          </svg>
+          <h3>Contact & Identity</h3>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-mobile">Mobile Number *</label>
+            <input type="tel" id="f-mobile" placeholder="10-digit number" maxlength="10" pattern="[0-9]{10}">
+          </div>
+          <div class="form-group">
+            <label for="f-email">Email</label>
+            <input type="email" id="f-email" placeholder="email@example.com">
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label for="f-aadhaar">Aadhaar Number</label>
+          <input type="text" id="f-aadhaar" placeholder="12-digit Aadhaar" maxlength="12" pattern="[0-9]{12}">
+        </div>
+      </div>
+
+      <!-- Address Section -->
+      <div class="form-section">
+        <div class="section-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <h3>Address Details</h3>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-state">State</label>
+            <input type="text" id="f-state" value="BIHAR" placeholder="State">
+          </div>
+          <div class="form-group">
+            <label for="f-district">District</label>
+            <select id="f-district">
+              <option value="">Select District</option>
+              <option value="Araria">Araria</option>
+              <option value="Arwal">Arwal</option>
+              <option value="Aurangabad">Aurangabad</option>
+              <option value="Banka">Banka</option>
+              <option value="Begusarai">Begusarai</option>
+              <option value="Bhagalpur">Bhagalpur</option>
+              <option value="Bhojpur">Bhojpur</option>
+              <option value="Buxar">Buxar</option>
+              <option value="Darbhanga">Darbhanga</option>
+              <option value="East Champaran">East Champaran</option>
+              <option value="Gaya">Gaya</option>
+              <option value="Gopalganj">Gopalganj</option>
+              <option value="Jamui">Jamui</option>
+              <option value="Jehanabad">Jehanabad</option>
+              <option value="Kaimur">Kaimur</option>
+              <option value="Katihar">Katihar</option>
+              <option value="Khagaria">Khagaria</option>
+              <option value="Kishanganj">Kishanganj</option>
+              <option value="Lakhisarai">Lakhisarai</option>
+              <option value="Madhepura">Madhepura</option>
+              <option value="Madhubani">Madhubani</option>
+              <option value="Munger">Munger</option>
+              <option value="Muzaffarpur">Muzaffarpur</option>
+              <option value="Nalanda">Nalanda</option>
+              <option value="Nawada">Nawada</option>
+              <option value="Patna">Patna</option>
+              <option value="Purnia">Purnia</option>
+              <option value="Rohtas">Rohtas</option>
+              <option value="Saharsa">Saharsa</option>
+              <option value="Samastipur">Samastipur</option>
+              <option value="Saran">Saran</option>
+              <option value="Sheikhpura">Sheikhpura</option>
+              <option value="Sheohar">Sheohar</option>
+              <option value="Sitamarhi">Sitamarhi</option>
+              <option value="Siwan">Siwan</option>
+              <option value="Supaul">Supaul</option>
+              <option value="Vaishali">Vaishali</option>
+              <option value="West Champaran">West Champaran</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-subdivision">Sub-Division</label>
+            <input type="text" id="f-subdivision" placeholder="Sub-Division name">
+          </div>
+          <div class="form-group">
+            <label for="f-block">Block / Circle</label>
+            <input type="text" id="f-block" placeholder="Block name">
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label for="f-localbody">Type of Local Body</label>
+          <select id="f-localbody">
+            <option value="">Select</option>
+            <option value="Village Panchayat">Village Panchayat / ग्राम पंचायत</option>
+            <option value="Municipal Corporation">Municipal Corporation / नगर निगम</option>
+            <option value="Municipality">Municipality / नगर परिषद</option>
+            <option value="Town Panchayat">Town Panchayat / नगर पंचायत</option>
+          </select>
+        </div>
+        <div class="form-group full-width" id="fg-panchayat">
+          <label for="f-panchayat">Gram Panchayat Name</label>
+          <input type="text" id="f-panchayat" placeholder="e.g. Rampur">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-ward">Ward No.</label>
+            <input type="text" id="f-ward" placeholder="Ward number">
+          </div>
+          <div class="form-group">
+            <label for="f-village">Village / Town</label>
+            <input type="text" id="f-village" placeholder="Village or Town">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-ps">Police Station</label>
+            <input type="text" id="f-ps" placeholder="Police Station">
+          </div>
+          <div class="form-group">
+            <label for="f-po">Post Office</label>
+            <input type="text" id="f-po" placeholder="Post Office">
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label for="f-pin">Pin Code</label>
+          <input type="text" id="f-pin" placeholder="6-digit PIN" maxlength="6" pattern="[0-9]{6}">
+        </div>
+        <div class="form-group full-width">
+          <label class="checkbox-label">
+            <input type="checkbox" id="f-present-same" checked>
+            Present Address same as Permanent Address
+          </label>
+        </div>
+      </div>
+
+      <!-- Form-Specific: Residence -->
+      <div class="form-section form-specific" id="section-residence">
+        <div class="section-header section-header-residence">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <h3>Residence Certificate</h3>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-res-type">Type of Residence</label>
+            <select id="f-res-type">
+              <option value="">Select</option>
+              <option value="Permanent">Permanent / स्थाई</option>
+              <option value="Temporary">Temporary / अस्थाई</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="f-res-purpose">Purpose of Application</label>
+            <input type="text" id="f-res-purpose" placeholder="Purpose">
+          </div>
+        </div>
+      </div>
+
+      <!-- Form-Specific: Income -->
+      <div class="form-section form-specific" id="section-income">
+        <div class="section-header section-header-income">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          <h3>Income Certificate</h3>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-inc-profession">Profession</label>
+            <input type="text" id="f-inc-profession" placeholder="e.g., Farmer, Service">
+          </div>
+          <div class="form-group">
+            <label for="f-inc-purpose">Purpose of Application</label>
+            <input type="text" id="f-inc-purpose" placeholder="Purpose">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-inc-govt">Income from Govt. Service</label>
+            <input type="number" id="f-inc-govt" placeholder="₹ 0" min="0">
+          </div>
+          <div class="form-group">
+            <label for="f-inc-agri">Income from Agriculture</label>
+            <input type="number" id="f-inc-agri" placeholder="₹ 0" min="0">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-inc-biz">Income from Business</label>
+            <input type="number" id="f-inc-biz" placeholder="₹ 0" min="0">
+          </div>
+          <div class="form-group">
+            <label for="f-inc-other">Income from Other Sources</label>
+            <input type="number" id="f-inc-other" placeholder="₹ 0" min="0">
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label for="f-inc-total">Total Annual Income</label>
+          <input type="number" id="f-inc-total" placeholder="Auto-calculated" min="0">
+          <span class="field-hint">Leave blank to auto-calculate</span>
+        </div>
+      </div>
+
+      <!-- Form-Specific: Caste -->
+      <div class="form-section form-specific" id="section-caste">
+        <div class="section-header section-header-caste">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          <h3>Caste Certificate</h3>
+        </div>
+        <div class="form-group full-width">
+          <label for="f-caste-profession">Profession</label>
+          <input type="text" id="f-caste-profession" placeholder="e.g., Farmer, Labour">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-caste-category">Category</label>
+            <select id="f-caste-category">
+              <option value="">Select</option>
+              <option value="SC">SC (Scheduled Caste)</option>
+              <option value="ST">ST (Scheduled Tribe)</option>
+              <option value="BC">BC (Backward Class)</option>
+              <option value="EBC">EBC (Extremely Backward)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="f-caste-name">Caste Name</label>
+            <input type="text" id="f-caste-name" placeholder="e.g., Yadav, Paswan">
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label for="f-caste-sub">Sub-Caste</label>
+          <input type="text" id="f-caste-sub" placeholder="Sub-caste (if any)">
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" id="btn-cancel" class="btn btn-secondary">Cancel</button>
+        <button type="submit" id="btn-save" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          Save Profile
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ── HIDDEN FILE INPUT FOR IMPORT ────────────────── -->
+  <input type="file" id="import-file" accept=".json" style="display:none">
+
+  <!-- ── TOAST NOTIFICATIONS ─────────────────────────── -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

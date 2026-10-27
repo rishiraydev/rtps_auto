@@ -1,0 +1,276 @@
+/* ============================================================
+   Bihar RTPS AutoFill — Content Script Styles
+   Floating panel UI on RTPS portal pages
+   ============================================================ */
+
+/* ── Floating Panel Container ────────────────────────────── */
+#rtps-autofill-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999999;
+  width: 320px;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    0 2px 8px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: rtps-af-slideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#rtps-autofill-panel.rtps-af-minimized {
+  width: 200px;
+}
+
+@keyframes rtps-af-slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Panel Header ────────────────────────────────────────── */
+.rtps-af-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+  color: #fff;
+  cursor: grab;
+  user-select: none;
+}
+
+.rtps-af-header:active {
+  cursor: grabbing;
+}
+
+.rtps-af-header svg {
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.rtps-af-header span {
+  flex: 1;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.4px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.rtps-af-minimize {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+  line-height: 1;
+}
+
+.rtps-af-minimize:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* ── Panel Body ──────────────────────────────────────────── */
+.rtps-af-body {
+  padding: 14px;
+  background: linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Status ──────────────────────────────────────────────── */
+.rtps-af-status {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #a0a0b0;
+  font-size: 12px;
+  line-height: 1.5;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.rtps-af-status-ok {
+  background: rgba(76, 175, 80, 0.12);
+  border-color: rgba(76, 175, 80, 0.25);
+  color: #81c784;
+}
+
+.rtps-af-status-warn {
+  background: rgba(255, 152, 0, 0.12);
+  border-color: rgba(255, 152, 0, 0.25);
+  color: #ffb74d;
+}
+
+.rtps-af-detected strong {
+  color: #e0e0ff;
+}
+
+/* ── Controls ────────────────────────────────────────────── */
+.rtps-af-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.rtps-af-select {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e0e0e0;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 26px;
+}
+
+.rtps-af-select:focus {
+  border-color: #5c6bc0;
+  box-shadow: 0 0 0 2px rgba(92, 107, 192, 0.25);
+}
+
+.rtps-af-select option {
+  background: #1e1e2e;
+  color: #e0e0e0;
+}
+
+/* ── Transliterate Toggle ────────────────────────────────── */
+.rtps-af-transliterate-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 11px;
+  color: #a0a0b0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.rtps-af-transliterate-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.rtps-af-transliterate-toggle input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: #5c6bc0;
+  cursor: pointer;
+}
+
+/* ── Fill Button ─────────────────────────────────────────── */
+.rtps-af-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  letter-spacing: 0.3px;
+}
+
+.rtps-af-btn-fill {
+  background: linear-gradient(135deg, #3949ab, #5c6bc0, #7986cb);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(57, 73, 171, 0.4);
+}
+
+.rtps-af-btn-fill:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(57, 73, 171, 0.5);
+  background: linear-gradient(135deg, #303f9f, #5c6bc0, #9fa8da);
+}
+
+.rtps-af-btn-fill:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(57, 73, 171, 0.3);
+}
+
+.rtps-af-btn-fill:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Result Message ──────────────────────────────────────── */
+.rtps-af-result {
+  font-size: 12px;
+  line-height: 1.5;
+  min-height: 0;
+  transition: all 0.3s;
+  padding: 0;
+  border-radius: 8px;
+}
+
+.rtps-af-result:not(:empty) {
+  padding: 8px 12px;
+  margin-top: 2px;
+}
+
+.rtps-af-result-success {
+  background: rgba(76, 175, 80, 0.12);
+  border: 1px solid rgba(76, 175, 80, 0.25);
+  color: #81c784;
+}
+
+.rtps-af-result-error {
+  background: rgba(244, 67, 54, 0.12);
+  border: 1px solid rgba(244, 67, 54, 0.25);
+  color: #ef9a9a;
+}
+
+.rtps-af-result-warn {
+  background: rgba(255, 152, 0, 0.12);
+  border: 1px solid rgba(255, 152, 0, 0.25);
+  color: #ffb74d;
+}
+
+/* ── Spinner Animation ───────────────────────────────────── */
+.rtps-af-spin {
+  animation: rtps-af-spin 1s linear infinite;
+}
+
+@keyframes rtps-af-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
