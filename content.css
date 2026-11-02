@@ -191,21 +191,28 @@
   cursor: pointer;
 }
 
-/* ── Fill Button ─────────────────────────────────────────── */
+/* ── Button Row & Action Buttons ───────────────────────── */
+.rtps-af-btn-row {
+  display: flex;
+  gap: 8px;
+}
+
 .rtps-af-btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 16px;
+  gap: 6px;
+  padding: 9px 12px;
   border: none;
-  border-radius: 10px;
-  font-size: 14px;
+  border-radius: 9px;
+  font-size: 13px;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   letter-spacing: 0.3px;
+  white-space: nowrap;
 }
 
 .rtps-af-btn-fill {
@@ -225,7 +232,23 @@
   box-shadow: 0 2px 8px rgba(57, 73, 171, 0.3);
 }
 
-.rtps-af-btn-fill:disabled {
+.rtps-af-btn-capture {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.rtps-af-btn-capture:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+  background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%);
+}
+
+.rtps-af-btn-capture:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.rtps-af-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }

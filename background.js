@@ -36,6 +36,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
+  if (message.action === 'captureForm') {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, message, (response) => {
+          sendResponse(response);
+        });
+      }
+    });
+    return true;
+  }
+
   if (message.action === 'saveCapturedProfile') {
     chrome.storage.local.get('profiles', (data) => {
       const profiles = data.profiles || [];

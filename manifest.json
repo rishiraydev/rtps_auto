@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Bihar RTPS AutoFill",
   "version": "1.0.0",
-  "description": "Automate form-filling on Bihar RTPS (ServicePlus) portal for Residence, Caste, Income, and Central NCL certificates.",
+  "description": "Automate form-filling on Bihar RTPS (ServicePlus) portal for Bihar NCL, Central NCL, EWS, Residence, Caste, Income, and Character certificates.",
   "permissions": [
     "storage",
     "activeTab",
