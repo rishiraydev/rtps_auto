@@ -8,3 +8,6 @@ Desktop.ini
 *.tmp
 *.bak
 cookies.txt
+
+# RTPS Form Source Reference Files (kept locally only)
+*_source.md
